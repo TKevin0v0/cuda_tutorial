@@ -90,7 +90,7 @@ __global__ void softmax_forward_kernel2(float *out, const float *inp, int N, int
 /*
 优化2：利用warp进行归约。这里的代码只能适用于block中线程有32个，因为没有比较各个warp之间的最大值
 */
-__device__ void warpReduceMax(float val)
+__device__ float warpReduceMax(float val)
 {
     for (int offset = 16; offset > 0; offset >>= 1)
         val = fmaxf(val, __shfl_down_sync(0xFFFFFFFF, val, offset));
